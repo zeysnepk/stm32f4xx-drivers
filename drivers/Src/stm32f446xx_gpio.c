@@ -17,6 +17,27 @@ void GPIO_Init(GPIO_Handle_t *pGPIOHandle){
 		pGPIOHandle->pGPIOx->MODER |= temp;
 	} else {
 		//interrupt modları
+		if( pGPIOHandle->GPIOPINCONF.GPIO_PINMODE == GPIO_MODE_IT_FT ){
+			//FTSR ayarı
+			EXTI->FTSR |= ( 1 << pGPIOHandle->GPIOPINCONF.GPIO_PINNUM );
+			//RTSR bitini temizleme
+			EXTI->RTSR &= ~( 1 << pGPIOHandle->GPIOPINCONF.GPIO_PINNUM );
+		} else if( pGPIOHandle->GPIOPINCONF.GPIO_PINMODE == GPIO_MODE_IT_RT ){
+			//RTSR ayarı
+			EXTI->RTSR |= ( 1 << pGPIOHandle->GPIOPINCONF.GPIO_PINNUM );
+			//FTSR bitini temizleme
+			EXTI->FTSR &= ~( 1 << pGPIOHandle->GPIOPINCONF.GPIO_PINNUM );
+		} else if( pGPIOHandle->GPIOPINCONF.GPIO_PINMODE == GPIO_MODE_IT_RFT ){
+			//hem FTSR hem de RTSR ayarı
+			EXTI->FTSR |= ( 1 << pGPIOHandle->GPIOPINCONF.GPIO_PINNUM );
+			EXTI->RTSR |= ( 1 << pGPIOHandle->GPIOPINCONF.GPIO_PINNUM );
+		}
+		//SYSCFG_EXTICR de GPIO port seçimi
+
+
+
+		//IMR kullanarak EXTI interrupt aktif etme
+		EXTI->IMR |= ( 1 << pGPIOHandle->GPIOPINCONF.GPIO_PINNUM );
 	}
 
 	temp = 0;

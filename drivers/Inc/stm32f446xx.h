@@ -45,6 +45,7 @@
 //RCC ADRESİ
 #define RCC_BASE_ADDR			( AHB1_BASE_ADDR + 0x3800 )
 
+
 //APB1 SPI, USART, UART, I2C ADRESLERİ
 #define SPI2_BASE_ADDR			( APB1_BASE_ADDR + 0x3800 )
 #define SPI3_BASE_ADDR			( APB1_BASE_ADDR + 0x3C00 )
@@ -98,6 +99,7 @@ typedef struct{
 #define GPIOG 				( ( GPIO_Reg_t* ) GPIOG_BASE_ADDR )
 #define GPIOH 				( ( GPIO_Reg_t* ) GPIOH_BASE_ADDR )
 
+
 //HER RCC İÇİN KULLANILABİLİR STRUCTURE
 typedef struct{
 	__vo uint32_t 		CR;					//RCC clock control register 									--> Address offset: 0x00
@@ -129,6 +131,32 @@ typedef struct{
 
 //RCC TANIMLAMASI
 #define RCC 				( ( RCC_Reg_t* )RCC_BASE_ADDR )
+
+//INTERRUPT İÇİN STRUCTURE VE MACRO
+typedef struct{
+	__vo uint32_t		IMR;				//Interrupt mask register	 		--> Address offset: 0x00
+	__vo uint32_t		EMR;				//Event mask register				--> Address offset: 0x04
+	__vo uint32_t		RTSR;				//Rising trigger selection register	--> Address offset: 0x08
+	__vo uint32_t		FTSR;				//Falling trigger selection register--> Address offset: 0x0C
+	__vo uint32_t		SWIER;				//Software interrupt event register --> Address offset: 0x10
+	__vo uint32_t		PR;					//Pending register					--> Address offset: 0x14
+}EXTI_Reg_t;
+
+#define EXTI 				( ( EXTI_Reg_t* )EXTI_BASE_ADDR )
+
+//SYSCFG İÇİN STRUCTURE
+typedef struct{
+	__vo uint32_t		MEMRMP;				//memory remap register 					 --> Address offset: 0x00
+	__vo uint32_t		PMC;				//peripheral mode configuration register	 --> Address offset: 0x04
+	__vo uint32_t		EXTICR1;			//external interrupt configuration register 1--> Address offset: 0x08
+	__vo uint32_t		EXTICR2;			//external interrupt configuration register 2--> Address offset: 0x0C
+	__vo uint32_t		EXTICR3;			//external interrupt configuration register 3--> Address offset: 0x10
+	__vo uint32_t		EXTICR4;			//external interrupt configuration register 4--> Address offset: 0x14
+	uint32_t			res[2];				//reserved									 --> Address offset: 0x18, 0x1C
+	__vo uint32_t		CMPCR;				//Compensation cell control register		 --> Address offset: 0x20
+	uint32_t			res2[2];			//reserved								     --> Address offset: 0x24, 0x28
+	__vo uint32_t		CFGR;				//configuration register					 --> Address offset: 0x2C
+}SYSCFG_Reg_t;
 
 //GPIO PİNLERİNİ RESETLEME
 #define GPIOA_RESET()		do{ ( RCC -> AHBRSTR[0] |= ( 1 << 0 ) ); ( RCC -> AHBRSTR[0] &= ~( 1 << 0 ) ); }while(0)
