@@ -224,15 +224,45 @@ void GPIO_ToggleOutputPin(GPIO_Reg_t *pGPIOx, uint8_t pinNum){
 }
 
 /*
- * @fn		GPIO_IRQConfig
+ * @fn		GPIO_IRQInterruptConfig
  * @brief 	Belirli bir IRQ hattı için yapılandırma yapar.
  * @param  	irqNum: Konfigüre edilecek IRQ numarası
- * @param  	irqPriority: IRQ öncelik seviyesi
  * @param  	EnOrDi: IRQ hattını etkinleştirmek veya devre dışı bırakmak için kullanılır (ENABLE/DISABLE)
  * @retval 	None
  */
-void GPIO_IRQConfig(uint8_t irqNum, uint8_t irqPriority, uint8_t EnOrDi){
+void GPIO_IRQInterruptConfig(uint8_t irqNum, uint8_t EnOrDi){
+	if( EnOrDi == ENABLE ){
+		if( irqNum <= 31 ){
+			*NVIC_ISER0 |= ( 1 << irqNum );
+		} else if( irqNum >= 32 && irqNum < 64 ){
+			*NVIC_ISER1 |= ( 1 << ( irqNum % 32 ) );
+		} else if( irqNum >= 64 && irqNum < 96 )
+			*NVIC_ISER2 |= ( 1 << ( irqNum % 64 ) );
+	}
+	else{
+		if( irqNum <= 31 ){
+			*NVIC_ICER0 |= ( 1 << irqNum );
+		} else if( irqNum > 31 && irqNum < 64 ){
+			*NVIC_ICER1 |= ( 1 << ( irqNum % 32 ) );
+		} else if( irqNum >= 64 && irqNum < 96 )
+			*NVIC_ICER2 |= ( 1 << ( irqNum % 64 ) );
+	}
+}
 
+/*
+ * @fn		GPIO_IRQPriorityConfig
+ * @brief 	Belirli bir IRQ numarası için öncelik ayarı yapar.
+ * @param  	irqNum: Konfigüre edilecek IRQ numarası
+ * @param  	irqPriority: IRQ öncelik seviyesi
+ * @retval 	None
+ */
+void GPIO_IRQPriorityConfig(uint8_t irqNum, uint8_t irqPriority){
+	//her IPR(0 - 59) adresi her biri 8 bitten oluşan 4 öncelik alan tutar(bu işlemciye göre değişebilir)
+	uint8_t iprx = irqNum /4 ;
+	uint8_t iprx_s = irqNum % 4;
+
+	//her öncelik bit alanlarının ilk 4 biti non-implemented low-order olarak geçer ve önemsenmez bu sebeple 4 bit kayma yapılır
+	*( NVIC_IPR_BASE_ADDR + ( iprx * 4 ) ) |= ( irqPriority << ( ( iprx_s * 8 ) + 4 ) );
 }
 
 /**
@@ -241,7 +271,9 @@ void GPIO_IRQConfig(uint8_t irqNum, uint8_t irqPriority, uint8_t EnOrDi){
  * @retval 	None
  */
 void GPIO_IRQHandling(uint8_t pinNum){
-
+	if( EXTI->PR & ( 1 << pinNum ) ){
+		EXTI->PR |= ( 1 << pinNum );
+	}
 }
 
 //GPIO ADRESLERİNİN KODLARI

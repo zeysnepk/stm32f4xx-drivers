@@ -13,25 +13,48 @@
 #define GPIO_PIN_SET	SET
 #define GPIO_PIN_RESET	RESET
 
+/********** INTERRUPT İÇİN NVIC ADRESLERİ --> CORTEX-M4 GENERIC USER GUIDE ************/
+//INTERRUPT NVIC ISERX ADRESLERİ
+#define NVIC_ISER0				( ( __vo uint32_t* ) 0xE000E100 )
+#define NVIC_ISER1				( ( __vo uint32_t* ) 0xE000E104 )
+#define NVIC_ISER2				( ( __vo uint32_t* ) 0xE000E108 )
+#define NVIC_ISER3				( ( __vo uint32_t* ) 0xE000E10C )
+#define NVIC_ISER4				( ( __vo uint32_t* ) 0xE000E110 )
+#define NVIC_ISER5				( ( __vo uint32_t* ) 0xE000E114 )
+#define NVIC_ISER6				( ( __vo uint32_t* ) 0xE000E118 )
+#define NVIC_ISER7				( ( __vo uint32_t* ) 0xE000E11C )
+
+//INTERRUPT NVIC ICERX ADRESLERİ
+#define NVIC_ICER0				( ( __vo uint32_t* ) 0XE000E180 )
+#define NVIC_ICER1				( ( __vo uint32_t* ) 0XE000E184 )
+#define NVIC_ICER2				( ( __vo uint32_t* ) 0XE000E188 )
+#define NVIC_ICER3				( ( __vo uint32_t* ) 0XE000E18C )
+#define NVIC_ICER4				( ( __vo uint32_t* ) 0XE000E190 )
+#define NVIC_ICER5				( ( __vo uint32_t* ) 0XE000E194 )
+#define NVIC_ICER6				( ( __vo uint32_t* ) 0XE000E198 )
+#define NVIC_ICER7				( ( __vo uint32_t* ) 0XE000E19C )
+
+//INTERRUPT PRIORITY BASE ADRESİ
+#define NVIC_IPR_BASE_ADDR		( ( __vo uint32_t* ) 0xE000E400 )
 
 /**************** BASE ADRESLER --> REFERENCE MANUAL *******************/
 
 //FLASH, SRAM VE ROM ADRESLERİ
-#define FLASH_BASE_ADDR			0X08000000U
-#define SRAM1_BASE_ADDR			0x20000000U //112 KB
-#define SRAM2_BASE_ADDR			0x2001C000U //SRAM2 = SRAM1 + 112(HEX)
-#define ROM_BASE_ADDR			0x1FFF0000U //System Memory
-#define SRAM 					SRAM1_BASE_ADDRR
+#define FLASH_BASE_ADDR			( 0X08000000U )
+#define SRAM1_BASE_ADDR			( 0x20000000U )		//112 KB
+#define SRAM2_BASE_ADDR			( 0x2001C000U ) 	//SRAM2 = SRAM1 + 112(HEX)
+#define ROM_BASE_ADDR			( 0x1FFF0000U ) 	//System Memory
+#define SRAM 					( SRAM1_BASE_ADDRR )
 
 //BUS ADRESLERİ
-#define PERI_BASE_ADDR			0x40000000U
-#define APB1_BASE_ADDR			PERI_BASE_ADDR
-#define APB2_BASE_ADDR			0x40010000U
-#define AHB1_BASE_ADDR			0x40020000U
-#define AHB2_BASE_ADDR			0x50000000U
+#define PERI_BASE_ADDR			( 0x40000000U )
+#define APB1_BASE_ADDR			( PERI_BASE_ADDR )
+#define APB2_BASE_ADDR			( 0x40010000U )
+#define AHB1_BASE_ADDR			( 0x40020000U )
+#define AHB2_BASE_ADDR			( 0x50000000U )
 
 //AHB1 GPIO ADRESLERİ
-#define GPIOA_BASE_ADDR				AHB1_BASE_ADDR
+#define GPIOA_BASE_ADDR					( AHB1_BASE_ADDR )
 #define GPIOB_BASE_ADDR			( AHB1_BASE_ADDR + 0x0400 )
 #define GPIOC_BASE_ADDR			( AHB1_BASE_ADDR + 0x0800 )
 #define GPIOD_BASE_ADDR			( AHB1_BASE_ADDR + 0x0C00 )
@@ -63,7 +86,7 @@
 #define EXTI_BASE_ADDR       	( APB2_BASE_ADDR + 0x3C00 )
 
 //SPI1 İÇİN REGISTER ADRESLERİ
-#define SPI1_CR1					SPI1_BASE_ADDR			//control register 1
+#define SPI1_CR1					( SPI1_BASE_ADDR )		//control register 1
 #define SPI1_CR2				( SPI1_BASE_ADDR + 0x04 )	//control register 2
 #define SPI1_SR					( SPI1_BASE_ADDR + 0x08 ) 	//status register
 #define SPI1_DR					( SPI1_BASE_ADDR + 0x0C )	//data register

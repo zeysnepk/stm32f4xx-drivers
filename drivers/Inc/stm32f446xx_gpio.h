@@ -98,8 +98,9 @@ void GPIO_WriteOutputPin(GPIO_Reg_t *pGPIOx, uint8_t pinNum, uint8_t value);
 void GPIO_WriteOutputPort(GPIO_Reg_t *pGPIOx, uint16_t value);
 void GPIO_ToggleOutputPin(GPIO_Reg_t *pGPIOx, uint8_t pinNum);
 
-//Interrupt fonksiyonları
-void GPIO_IRQConfig(uint8_t irqNum, uint8_t irqPriority, uint8_t EnOrDi);	//IRQ: Interrupt Configuration
-void GPIO_IRQHandling(uint8_t pinNum);										//trigger algılandığında çalışacak fonksiyon
+//Interrupt fonksiyonları / IRQ: Interrupt Configuration
+void GPIO_IRQInterruptConfig(uint8_t irqNum, uint8_t EnOrDi);
+void GPIO_IRQPriorityConfig(uint8_t irqNum, uint8_t irqPriority);
+void GPIO_IRQHandling(uint8_t pinNum);							//trigger algılandığında çalışacak fonksiyon
 
 #endif /* STM32F446_GPIO_H_ */
