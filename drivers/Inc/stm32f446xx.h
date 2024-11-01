@@ -3,8 +3,6 @@
 
 #include <stdint.h>
 
-
-
 #define __vo 			volatile
 
 
@@ -16,7 +14,7 @@
 #define GPIO_PIN_RESET	RESET
 
 
-/**************** BASE ADRESLER --> REFERENCE MANUEL *******************/
+/**************** BASE ADRESLER --> REFERENCE MANUAL *******************/
 
 //FLASH, SRAM VE ROM ADRESLERİ
 #define FLASH_BASE_ADDR			0X08000000U
@@ -89,6 +87,8 @@ typedef struct{
 	__vo uint32_t		AFRH;				//GPIO alternate function high register 	--> 	Address offset: 0x24
 }GPIO_Reg_t;
 
+extern uint8_t GPIO_ADDRESS_CODE(GPIO_Reg_t *x);
+
 //GPIO TANIMLAMALARI
 #define GPIOA 				( ( GPIO_Reg_t* ) GPIOA_BASE_ADDR )
 #define GPIOB 				( ( GPIO_Reg_t* ) GPIOB_BASE_ADDR )
@@ -148,15 +148,14 @@ typedef struct{
 typedef struct{
 	__vo uint32_t		MEMRMP;				//memory remap register 					 --> Address offset: 0x00
 	__vo uint32_t		PMC;				//peripheral mode configuration register	 --> Address offset: 0x04
-	__vo uint32_t		EXTICR1;			//external interrupt configuration register 1--> Address offset: 0x08
-	__vo uint32_t		EXTICR2;			//external interrupt configuration register 2--> Address offset: 0x0C
-	__vo uint32_t		EXTICR3;			//external interrupt configuration register 3--> Address offset: 0x10
-	__vo uint32_t		EXTICR4;			//external interrupt configuration register 4--> Address offset: 0x14
+	__vo uint32_t		EXTICR[4];			//external interrupt configuration registers --> Address offset: 0x08 - 0x014
 	uint32_t			res[2];				//reserved									 --> Address offset: 0x18, 0x1C
 	__vo uint32_t		CMPCR;				//Compensation cell control register		 --> Address offset: 0x20
 	uint32_t			res2[2];			//reserved								     --> Address offset: 0x24, 0x28
 	__vo uint32_t		CFGR;				//configuration register					 --> Address offset: 0x2C
 }SYSCFG_Reg_t;
+
+#define SYSCFG 			( ( SYSCFG_Reg_t* )SYSCFG_BASE_ADDR )
 
 //GPIO PİNLERİNİ RESETLEME
 #define GPIOA_RESET()		do{ ( RCC -> AHBRSTR[0] |= ( 1 << 0 ) ); ( RCC -> AHBRSTR[0] &= ~( 1 << 0 ) ); }while(0)
@@ -227,6 +226,16 @@ typedef struct{
 
 //SYSCFG İÇİN CLOCK DEVRE DIŞI BIRAKMA
 #define SYSCFG_CLK_DI()		( RCC -> APBENR[1] &= ~( 1 << 14 ) )
+
+//EXTI HATLARININ ÖNCELİKLERİ İÇİN IRQ NUMARLARI --> vector table (reference manual)
+#define IRQ_NUM_EXTI0		6
+#define IRQ_NUM_EXTI1		7
+#define IRQ_NUM_EXTI2		8
+#define IRQ_NUM_EXTI3		9
+#define IRQ_NUM_EXTI4		10
+#define IRQ_NUM_EXTI9_5		23
+#define IRQ_NUM_EXTI15_10	40
+
 
 #include "stm32f446xx_gpio.h"
 

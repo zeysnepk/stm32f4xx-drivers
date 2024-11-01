@@ -33,7 +33,14 @@ void GPIO_Init(GPIO_Handle_t *pGPIOHandle){
 			EXTI->RTSR |= ( 1 << pGPIOHandle->GPIOPINCONF.GPIO_PINNUM );
 		}
 		//SYSCFG_EXTICR de GPIO port seçimi
+		uint8_t temp1 = pGPIOHandle->GPIOPINCONF.GPIO_PINNUM / 4;
+		uint8_t temp2 = pGPIOHandle->GPIOPINCONF.GPIO_PINNUM % 4;
 
+		uint8_t portcode = GPIO_ADDRESS_CODE(pGPIOHandle->pGPIOx);
+
+
+		SYSCFG_CLK_EN();
+		SYSCFG->EXTICR[temp1] = portcode << ( temp2 * 4 );
 
 
 		//IMR kullanarak EXTI interrupt aktif etme
@@ -235,4 +242,25 @@ void GPIO_IRQConfig(uint8_t irqNum, uint8_t irqPriority, uint8_t EnOrDi){
  */
 void GPIO_IRQHandling(uint8_t pinNum){
 
+}
+
+//GPIO ADRESLERİNİN KODLARI
+uint8_t GPIO_ADDRESS_CODE(GPIO_Reg_t *x){
+	if( x == GPIOA ){
+		return 0;
+	} else if( x == GPIOB ){
+		return 1;
+	} else if( x == GPIOC ){
+		return 2;
+	} else if( x == GPIOD ){
+		return 3;
+	} else if( x == GPIOE ){
+		return 4;
+	} else if( x == GPIOF ){
+		return 5;
+	} else if( x == GPIOG ){
+		return 6;
+	} else{
+		return 7;
+	}
 }
